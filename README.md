@@ -117,7 +117,7 @@ AudioBookRequest supports both SQLite (default) and PostgreSQL databases:
 
 **Note**: There are two underscores (`__`) between the first and second part of each environment variable.
 
-**PostgreSQL Setup**: When using PostgreSQL, ensure the database exists and is accessible before starting the application. For Docker deployments, copy `.env.example` to `.env` and customize the database credentials.
+**PostgreSQL Setup**: When using PostgreSQL, ensure the database exists and is accessible before starting the application. For Docker deployments, copy `.env.example` to `.env` and customize the database credentials. Database migrations will run automatically.
 
 ---
 
@@ -158,6 +158,7 @@ For PostgreSQL support:
 2. Ensure PostgreSQL server is running and accessible
 3. Create the database if it doesn't exist
 4. Configure environment variables (see [Environment Variables](#environment-variables) section)
+5. Run migrations: `uv run alembic upgrade heads` (now fully compatible with PostgreSQL)
 
 ## Initialize Database
 

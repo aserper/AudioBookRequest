@@ -48,7 +48,7 @@ to run the app in production mode instead of debug/local mode.
 2. Run the python script to fetch and download all required javascript files:
    `uv run python /app/util/fetch_js.py`. This should populate your `static/`
    directory with some new js files.
-3. Initialize the database with migrations:
+3. Initialize the database with migrations (now fully compatible with PostgreSQL):
    ```bash
    uv run alembic upgrade heads
    ```

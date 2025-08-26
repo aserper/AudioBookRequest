@@ -68,7 +68,7 @@ To use PostgreSQL for local development:
 [Alembic](https://alembic.sqlalchemy.org/en/latest/) is used to create database
 migrations. Run the following before starting up the application for the first
 time. It will initialize the directory if non-existant, create the database file
-as well as execute any required migrations.
+as well as execute any required migrations. PostgreSQL migrations are now fully compatible.
 
 ```sh
 uv run alembic upgrade heads
