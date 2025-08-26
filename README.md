@@ -86,19 +86,38 @@ In the case of an OIDC misconfiguration, i.e. changing a setting like your clien
 
 ### Environment Variables
 
+#### Database Configuration
+
+AudioBookRequest supports both SQLite (default) and PostgreSQL databases:
+
+| ENV                            | Description                                                                                                                                                                                                                                                  | Default            |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------ |
+| `ABR_DB__TYPE`                 | Database type to use. Can be `sqlite` or `postgresql`.                                                                                                                                                                                                       | sqlite             |
+| `ABR_DB__SQLITE_PATH`          | If relative, path and name of the sqlite database in relation to `ABR_APP__CONFIG_DIR`. If absolute (path starts with `/`), the config dir is ignored and only the absolute path is used. Only used when `ABR_DB__TYPE` is `sqlite`.                    | db.sqlite          |
+| `ABR_DB__POSTGRESQL__HOST`     | PostgreSQL database host. Only used when `ABR_DB__TYPE` is `postgresql`.                                                                                                                                                                                     | localhost          |
+| `ABR_DB__POSTGRESQL__PORT`     | PostgreSQL database port. Only used when `ABR_DB__TYPE` is `postgresql`.                                                                                                                                                                                     | 5432               |
+| `ABR_DB__POSTGRESQL__USER`     | PostgreSQL database user. Only used when `ABR_DB__TYPE` is `postgresql`.                                                                                                                                                                                     | postgres           |
+| `ABR_DB__POSTGRESQL__PASSWORD` | PostgreSQL database password. Only used when `ABR_DB__TYPE` is `postgresql`.                                                                                                                                                                                 |                    |
+| `ABR_DB__POSTGRESQL__DATABASE` | PostgreSQL database name. Only used when `ABR_DB__TYPE` is `postgresql`.                                                                                                                                                                                     | audiobookrequest   |
+
+#### Application Settings
+
 | ENV                           | Description                                                                                                                                                                                                                                                  | Default   |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------- | --- | --- |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------- |
 | `ABR_APP__PORT`               | The port to run the server on.                                                                                                                                                                                                                               | 8000      |
 | `ABR_APP__DEBUG`              | If to enable debug mode. Not recommended for production.                                                                                                                                                                                                     | false     |
 | `ABR_APP__OPENAPI_ENABLED`    | If set to `true`, enables an OpenAPI specs page on `/docs`.                                                                                                                                                                                                  | false     |
 | `ABR_APP__CONFIG_DIR`         | The directory path where persistant data and configuration is stored. If ran using Docker or Kubernetes, this is the location a volume should be mounted to.                                                                                                 | /config   |
 | `ABR_APP__LOG_LEVEL`          | One of `DEBUG`, `INFO`, `WARN`, `ERROR`.                                                                                                                                                                                                                     | INFO      |
 | `ABR_APP__BASE_URL`           | Defines the base url the website is hosted at. If the website is accessed at `example.org/abr/`, set the base URL to `/abr/`                                                                                                                                 |           |
-| `ABR_DB__SQLITE_PATH`         | If relative, path and name of the sqlite database in relation to `ABR_APP__CONFIG_DIR`. If absolute (path starts with `/`), the config dir is ignored and only the absolute path is used.                                                                    | db.sqlite |
 | `ABR_APP__DEFAULT_REGION`     | Default audible region to use for the search. Has to be one of `us, ca, uk, au, fr, de, jp, it, in, es, br`.                                                                                                                                                 | us        |
 | `ABR_APP__FORCE_LOGIN_TYPE`   | Forces the login type and prevents it from being modified. Can be one of `basic`, `forms`, `oidc`, or `none` to disable the login. `oidc` requires both the `ABR_APP__INIT_ROOT_USERNAME` and `ABR_APP__INIT_ROOT_PASSWORD` environment variables to be set. |           |
 | `ABR_APP__INIT_ROOT_USERNAME` | Sets the initial username of the root user when first launching ABR. Has no effect if a root admin already exists.                                                                                                                                           |           |
-| `ABR_APP__INIT_ROOT_PASSWORD` | Sets the initial password of the root user when first launching ABR. Has no effect if a root admin already exists.                                                                                                                                           |           |     | us  |
+| `ABR_APP__INIT_ROOT_PASSWORD` | Sets the initial password of the root user when first launching ABR. Has no effect if a root admin already exists.                                                                                                                                           |           |
+
+**Note**: There are two underscores (`__`) between the first and second part of each environment variable.
+
+**PostgreSQL Setup**: When using PostgreSQL, ensure the database exists and is accessible before starting the application. For Docker deployments, copy `.env.example` to `.env` and customize the database credentials.
 
 ---
 
@@ -119,11 +138,26 @@ Python virtual environments help isolate any installed packages to this director
 For improved dependency management, `uv` is used instead of `pip`.
 
 ```sh
-# This creates the venv as well as installs all dependencies
+# This creates the venv as well as installs all dependencies (SQLite only)
 uv sync
+
+# For PostgreSQL support, install additional dependencies
+uv sync --group postgresql
 ```
 
 For local development, environment variables can be added to `.env.local` and they'll be used wherever required.
+
+### Database Setup
+
+#### SQLite (Default)
+SQLite requires no additional setup and works out of the box for local development.
+
+#### PostgreSQL (Production)
+For PostgreSQL support:
+1. Install PostgreSQL dependencies: `uv sync --group postgresql`
+2. Ensure PostgreSQL server is running and accessible
+3. Create the database if it doesn't exist
+4. Configure environment variables (see [Environment Variables](#environment-variables) section)
 
 ## Initialize Database
 
@@ -166,11 +200,21 @@ browser-sync http://localhost:8000 --files templates/** --files app/**
 
 ## Docker Compose
 
-The docker compose can also be used to run the app locally:
+The docker compose can be used to run the app locally with different database backends:
 
+### SQLite (Default - Local Development)
 ```bash
+# Uses SQLite database for lightweight development
 docker compose --profile local up --build
 ```
+
+### PostgreSQL (Production)
+```bash
+# Uses PostgreSQL database with persistent storage
+docker compose --profile postgresql up --build
+```
+
+See [DOCKER_USAGE.md](DOCKER_USAGE.md) for detailed configuration options and environment variables.
 
 # Docs
 

@@ -54,3 +54,4 @@ ignore = "H021"
 
 [dependency-groups]
 dev = ["djlint", "pyright", "ruff"]
+postgresql = ["psycopg2-binary"]

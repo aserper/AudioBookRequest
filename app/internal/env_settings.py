@@ -1,15 +1,39 @@
 import pathlib
+from enum import Enum
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from app.internal.auth.login_types import LoginTypeEnum
 
 
+class DatabaseType(str, Enum):
+    SQLITE = "sqlite"
+    POSTGRESQL = "postgresql"
+
+
+class PostgreSQLSettings(BaseModel):
+    host: str = "localhost"
+    port: int = 5432
+    user: str = "postgres"
+    password: str = ""
+    database: str = "audiobookrequest"
+    
+    def get_database_url(self) -> str:
+        """Generate PostgreSQL database URL."""
+        return f"postgresql+psycopg2://{self.user}:{self.password}@{self.host}:{self.port}/{self.database}"
+
+
 class DBSettings(BaseModel):
+    type: DatabaseType = DatabaseType.SQLITE
+    """Database type to use (sqlite or postgresql)."""
+    
     sqlite_path: str = "db.sqlite"
     """Relative path to the sqlite database given the config directory. If absolute, it ignores the config dir location."""
+    
+    postgresql: PostgreSQLSettings = Field(default_factory=PostgreSQLSettings)
+    """PostgreSQL configuration settings."""
 
 
 class ApplicationSettings(BaseModel):
@@ -55,7 +79,16 @@ class Settings(BaseSettings):
     db: DBSettings = DBSettings()
     app: ApplicationSettings = ApplicationSettings()
 
-    def get_sqlite_path(self):
+    def get_sqlite_path(self) -> str:
+        """Get the full path to the SQLite database file."""
         if self.db.sqlite_path.startswith("/"):
             return self.db.sqlite_path
         return str(pathlib.Path(self.app.config_dir) / self.db.sqlite_path)
+    
+    def get_database_url(self) -> str:
+        """Get the appropriate database URL based on the database type."""
+        if self.db.type == DatabaseType.POSTGRESQL:
+            return self.db.postgresql.get_database_url()
+        else:
+            sqlite_path = self.get_sqlite_path()
+            return f"sqlite+pysqlite:///{sqlite_path}"

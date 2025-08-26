@@ -22,12 +22,46 @@ Older python versions might not work or could have incorrect typing.
 For improved dependency management, `uv` is used instead of `pip`.
 
 ```sh
-# This creates the venv as well as installs all dependencies
+# This creates the venv as well as installs all dependencies (SQLite support)
 uv sync
+
+# For PostgreSQL support, install additional dependencies
+uv sync --group postgresql
 ```
 
 For local development, environment variables can be added to `.env.local` and
 they'll be used wherever required. This file is not used in production.
+
+## Database Configuration
+
+### SQLite (Default)
+
+SQLite is the default database and requires no additional setup. The database file will be created automatically in your config directory.
+
+### PostgreSQL (Optional)
+
+To use PostgreSQL for local development:
+
+1. Install and start PostgreSQL on your system
+2. Create a development database:
+   ```sql
+   CREATE DATABASE audiobookrequest_dev;
+   CREATE USER abr_dev WITH ENCRYPTED PASSWORD 'dev_password';
+   GRANT ALL PRIVILEGES ON DATABASE audiobookrequest_dev TO abr_dev;
+   ```
+3. Install PostgreSQL dependencies:
+   ```sh
+   uv sync --group postgresql
+   ```
+4. Configure your `.env.local` file:
+   ```bash
+   ABR_DB__TYPE=postgresql
+   ABR_DB__POSTGRESQL__HOST=localhost
+   ABR_DB__POSTGRESQL__PORT=5432
+   ABR_DB__POSTGRESQL__USER=abr_dev
+   ABR_DB__POSTGRESQL__PASSWORD=dev_password
+   ABR_DB__POSTGRESQL__DATABASE=audiobookrequest_dev
+   ```
 
 ## Initialize Database
 
@@ -84,15 +118,24 @@ browser-sync http://localhost:8000 --files templates/** --files app/**
 ## Docker Compose
 
 The docker compose can also be used to run the app locally. Any services that
-are required can be added to it for easy testing:
+are required can be added to it for easy testing.
 
+### SQLite Development
 ```bash
-docker compose up --build
+# Run with SQLite database (lightweight for development)
+docker compose --profile local up --build
 ```
 
-The local context (ABR) is in a docker compose profile called `local`, which is
-only run if explicitly stated as follows:
-
+### PostgreSQL Development
 ```bash
-docker compose --profile local up
+# Run with PostgreSQL database (matches production setup)
+docker compose --profile postgresql up --build
 ```
+
+The PostgreSQL profile automatically sets up both the application and a PostgreSQL database server with proper networking and health checks. This is useful for:
+
+- Testing PostgreSQL-specific features
+- Matching production database setup
+- Development scenarios requiring more robust database features
+
+For PostgreSQL development, you can customize database credentials by copying `.env.example` to `.env` and modifying the values.

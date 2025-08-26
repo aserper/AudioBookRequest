@@ -27,7 +27,7 @@ COPY --from=0 /app/node_modules/ node_modules/
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 COPY uv.lock pyproject.toml /app/
-RUN uv sync --frozen --no-cache
+RUN uv sync --frozen --no-cache --group postgresql
 
 COPY alembic/ alembic/
 COPY alembic.ini alembic.ini
