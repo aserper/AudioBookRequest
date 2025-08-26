@@ -26,15 +26,15 @@ def upgrade() -> None:
     op.execute("DELETE FROM bookrequest")
     with op.batch_alter_table("bookrequest", schema=None) as batch_op:
         batch_op.add_column(
-            sa.Column("title", sqlmodel.sql.sqltypes.AutoString(), nullable=False)
+            sa.Column("title", sa.String(), nullable=False)
         )
         batch_op.add_column(
-            sa.Column("subtitle", sqlmodel.sql.sqltypes.AutoString(), nullable=True)
+            sa.Column("subtitle", sa.String(), nullable=True)
         )
         batch_op.add_column(sa.Column("authors", sa.JSON(), nullable=True))
         batch_op.add_column(sa.Column("narrators", sa.JSON(), nullable=True))
         batch_op.add_column(
-            sa.Column("cover_image", sqlmodel.sql.sqltypes.AutoString(), nullable=True)
+            sa.Column("cover_image", sa.String(), nullable=True)
         )
         batch_op.add_column(sa.Column("release_date", sa.DateTime(), nullable=False))
         batch_op.add_column(

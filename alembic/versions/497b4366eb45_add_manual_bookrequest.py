@@ -25,13 +25,13 @@ def upgrade() -> None:
     op.create_table(
         "manualbookrequest",
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column("user_username", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-        sa.Column("title", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-        sa.Column("subtitle", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+        sa.Column("user_username", sa.String(), nullable=False),
+        sa.Column("title", sa.String(), nullable=False),
+        sa.Column("subtitle", sa.String(), nullable=True),
         sa.Column("authors", sa.JSON(), nullable=True),
         sa.Column("narrators", sa.JSON(), nullable=True),
-        sa.Column("publish_date", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
-        sa.Column("additional_info", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+        sa.Column("publish_date", sa.String(), nullable=True),
+        sa.Column("additional_info", sa.String(), nullable=True),
         sa.Column(
             "updated_at",
             sa.DateTime(),

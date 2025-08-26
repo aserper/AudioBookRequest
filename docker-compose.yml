@@ -63,6 +63,7 @@ services:
       - ABR_DB__POSTGRESQL__USER=${POSTGRES_USER:-audiobookrequest}
       - ABR_DB__POSTGRESQL__PASSWORD=${POSTGRES_PASSWORD:-audiobookrequest_password}
       - ABR_DB__POSTGRESQL__DATABASE=${POSTGRES_DB:-audiobookrequest}
+    command: /app/.venv/bin/fastapi run --port 8000
     depends_on:
       postgres:
         condition: service_healthy

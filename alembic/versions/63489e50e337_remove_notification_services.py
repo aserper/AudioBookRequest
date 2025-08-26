@@ -35,7 +35,7 @@ def upgrade() -> None:
         batch_op.add_column(
             sa.Column(
                 "body",
-                sqlmodel.sql.sqltypes.AutoString(),
+                sa.String(),
                 nullable=False,
                 server_default="{}",
             )

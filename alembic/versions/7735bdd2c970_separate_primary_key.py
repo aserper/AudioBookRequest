@@ -25,7 +25,7 @@ def upgrade() -> None:
     with op.batch_alter_table("bookrequest", schema=None) as batch_op:
         batch_op.drop_column("asin")
         batch_op.add_column(
-            sa.Column("asin", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+            sa.Column("asin", sa.String(), nullable=False),
         )
         batch_op.add_column(sa.Column("id", sa.Uuid(), nullable=False))
         batch_op.create_primary_key("pk_bookrequest", ["id"])
