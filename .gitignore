@@ -9,3 +9,4 @@ data
 node_modules
 result
 .ruff_cache
+CLAUDE.md
