@@ -46,7 +46,7 @@ def upgrade() -> None:
         batch_op.create_unique_constraint("unique_asin_user", ["asin", "user_username"])
         batch_op.create_foreign_key(
             "user_user_username",
-            "user",
+            '"user"',
             ["user_username"],
             ["username"],
             ondelete="SET NULL",
@@ -60,7 +60,7 @@ def downgrade() -> None:
     with op.batch_alter_table("bookrequest", schema=None) as batch_op:
         batch_op.create_foreign_key(
             "user_user_username",
-            "user",
+            '"user"',
             ["user_username"],
             ["username"],
             ondelete="CASCADE",

@@ -30,7 +30,7 @@ def upgrade() -> None:
     sa.Column('narrators', sa.String(), nullable=False),
     sa.Column('cover_image', sa.String(), nullable=True),
     sa.Column('user_username', sa.String(), nullable=False),
-    sa.ForeignKeyConstraint(['user_username'], ['user.username'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['user_username'], ['"user".username'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('asin')
     )
     with op.batch_alter_table('user', schema=None) as batch_op:

@@ -33,7 +33,7 @@ def upgrade() -> None:
         batch_op.drop_constraint("user_user_username", type_="foreignkey")
         batch_op.create_foreign_key(
             "user_user_username",
-            "user",
+            '"user"',
             ["user_username"],
             ["username"],
             ondelete="CASCADE",
@@ -50,7 +50,7 @@ def downgrade() -> None:
         batch_op.drop_constraint("user_user_username", type_="foreignkey")
         batch_op.create_foreign_key(
             "user_user_username",
-            "user",
+            '"user"',
             ["user_username"],
             ["username"],
             ondelete="SET NULL",

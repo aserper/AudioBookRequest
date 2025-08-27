@@ -108,7 +108,7 @@ docker-compose exec postgres pg_isready -U audiobookrequest
 ```
 
 **Migration Issues**:
-Database migrations now run automatically and are fully compatible with PostgreSQL. If needed, you can run them manually:
+Database migrations run automatically and are compatible with PostgreSQL. If needed, you can run them manually:
 ```bash
 # Run database migrations manually (rarely needed)
 docker-compose exec web-postgresql /app/.venv/bin/alembic upgrade heads

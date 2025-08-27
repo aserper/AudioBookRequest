@@ -4,6 +4,7 @@ from logging.config import fileConfig
 
 from alembic import context
 from sqlalchemy import create_engine, pool
+from sqlalchemy.sql import text
 from app.internal import models
 from app.internal.env_settings import Settings, DatabaseType
 
@@ -98,12 +99,12 @@ def run_migrations() -> None:
         with engine.connect() as test_conn:
             if settings.db.type == DatabaseType.POSTGRESQL:
                 # Verify PostgreSQL connection and version
-                result = test_conn.execute("SELECT version()")
+                result = test_conn.execute(text("SELECT version()"))
                 version_info = result.fetchone()[0]
                 logger.info(f"PostgreSQL version: {version_info}")
             else:
                 # Verify SQLite connection
-                result = test_conn.execute("SELECT sqlite_version()")
+                result = test_conn.execute(text("SELECT sqlite_version()"))
                 version_info = result.fetchone()[0]
                 logger.info(f"SQLite version: {version_info}")
         

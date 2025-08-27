@@ -29,7 +29,7 @@ def upgrade() -> None:
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
     sa.Column('last_used', sa.DateTime(), nullable=True),
     sa.Column('enabled', sa.Boolean(), nullable=False),
-    sa.ForeignKeyConstraint(['user_username'], ['user.username'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['user_username'], ['"user".username'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###

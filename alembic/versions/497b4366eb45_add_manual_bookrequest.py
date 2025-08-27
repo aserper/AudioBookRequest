@@ -39,7 +39,7 @@ def upgrade() -> None:
             nullable=False,
         ),
         sa.ForeignKeyConstraint(
-            ["user_username"], ["user.username"], ondelete="CASCADE"
+            ["user_username"], ['"user".username'], ondelete="CASCADE"
         ),
         sa.PrimaryKeyConstraint("id"),
     )

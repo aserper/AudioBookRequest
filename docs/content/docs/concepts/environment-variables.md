@@ -29,7 +29,7 @@ date: 2025-06-09T13:46:33+02:00
 and second part of each environment variable like between `ABR_APP` and `PORT`.
 {{< /alert >}}
 
-{{< alert title="PostgreSQL Support" >}} To use PostgreSQL as the database backend, you need to install the PostgreSQL dependencies. If using uv, run `uv sync --group postgresql` to install the required packages. When using PostgreSQL, make sure the database exists and is accessible before starting the application. Database migrations are fully compatible and run automatically. {{< /alert >}}
+{{< alert title="PostgreSQL Support" >}} To use PostgreSQL as the database backend, you need to install the PostgreSQL dependencies. If using uv, run `uv sync --group postgresql` to install the required packages. When using PostgreSQL, make sure the database exists and is accessible before starting the application. Database migrations are compatible and run automatically. {{< /alert >}}
 
 ## Configuration Examples
 
@@ -83,7 +83,7 @@ vim .env
 
 ### Migration Issues
 
-Database migrations are now fully compatible with both SQLite and PostgreSQL. Migrations run automatically in most cases, but can be run manually if needed:
+Database migrations are compatible with both SQLite and PostgreSQL. Migrations run automatically in most cases, but can be run manually if needed:
 
 ```bash
 # Apply all pending migrations (rarely needed)

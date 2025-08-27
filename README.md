@@ -158,7 +158,7 @@ For PostgreSQL support:
 2. Ensure PostgreSQL server is running and accessible
 3. Create the database if it doesn't exist
 4. Configure environment variables (see [Environment Variables](#environment-variables) section)
-5. Run migrations: `uv run alembic upgrade heads` (now fully compatible with PostgreSQL)
+5. Run migrations: `uv run alembic upgrade heads`
 
 ## Initialize Database
 

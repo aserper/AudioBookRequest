@@ -46,7 +46,7 @@ The PostgreSQL profile includes a PostgreSQL database server for production depl
 docker compose --profile postgresql up -d
 ```
 
-The PostgreSQL profile includes both the application and database services with proper health checks and networking. Database migrations run automatically and are fully compatible with PostgreSQL.
+The PostgreSQL profile includes both the application and database services with proper health checks and networking. Database migrations run automatically and are compatible with PostgreSQL.
 
 ## Environment Configuration
 
